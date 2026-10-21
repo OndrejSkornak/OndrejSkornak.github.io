@@ -8,15 +8,32 @@
   color-scheme: light dark;
 }
 
+/* Dark colors: used when the system is dark (unless light is forced),
+   or when dark is picked with the toggle. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --bg: #161616;
     --text: #e6e6e6;
     --muted: #9a9a9a;
     --border: #2e2e2e;
     --link: #78aeed;
     --code-bg: #222222;
+    color-scheme: dark;
   }
+}
+
+:root[data-theme='dark'] {
+  --bg: #161616;
+  --text: #e6e6e6;
+  --muted: #9a9a9a;
+  --border: #2e2e2e;
+  --link: #78aeed;
+  --code-bg: #222222;
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
 }
 
 *,
@@ -83,6 +100,7 @@ h3 {
 
 .site-header nav {
   display: flex;
+  align-items: center;
   gap: 1rem;
 }
 
@@ -187,6 +205,7 @@ code {
 }
 
 pre {
+  border: 1px solid var(--border);
   padding: 1rem;
   border-radius: 6px;
   overflow-x: auto;
@@ -194,13 +213,56 @@ pre {
   line-height: 1.5;
 }
 
-/* Shiki dual theme: use dark colors when the system is in dark mode */
+/* Code blocks switch to their dark colors together with the site */
 @media (prefers-color-scheme: dark) {
-  .astro-code,
-  .astro-code span {
+  :root:not([data-theme='light']) .astro-code,
+  :root:not([data-theme='light']) .astro-code span {
     color: var(--shiki-dark) !important;
     background-color: var(--shiki-dark-bg) !important;
   }
+}
+
+:root[data-theme='dark'] .astro-code,
+:root[data-theme='dark'] .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+/* Theme toggle */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  color: var(--text);
+}
+
+.theme-toggle svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Show the moon in light mode, the sun in dark mode */
+.theme-toggle .sun {
+  display: none;
+}
+
+:root[data-theme='dark'] .theme-toggle .sun {
+  display: block;
+}
+
+:root[data-theme='dark'] .theme-toggle .moon {
+  display: none;
 }
 
 hr {
